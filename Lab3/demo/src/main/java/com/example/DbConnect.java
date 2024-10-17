@@ -20,14 +20,15 @@ public class DbConnect {
     private static final String PASSWORD = "11235813";
  
     private static Connection connection = null;
- 
-   static {
-        try {
-            connection = DriverManager.getConnection(CONNECTION_STRING, USERNAME, PASSWORD);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
+    public DbConnect() {
+       try {
+           connection = DriverManager.getConnection(CONNECTION_STRING, USERNAME, PASSWORD);
+       } catch (SQLException e) {
+           throw new RuntimeException(e);
+       }
+   }
+
 
     public static List<TaskItem> fetchTaskEntities(){
         List<TaskItem> fetchedTaskEntities = new ArrayList<>();
@@ -101,13 +102,14 @@ public class DbConnect {
     }
 }
     public static void main(String[] args) {
+        DbConnect dbC = new DbConnect();
         List<TaskItem> taskItemsFromDb = fetchTaskEntities();
         for(TaskItem task : taskItemsFromDb){
-            System.out.println(task);
+            System.out.println(task.taskDescription);
         }
         TaskItem idToFetch = fetchById(2);
-        System.out.println("Id for search was: "+idToFetch);
-        createTask(5, "New Task", Status.TO_DO);
-        updateTaskNameById(5, "Good job! You've updated this task");
+        System.out.println("Id for search was: "+idToFetch.taskId);
+        //createTask(5, "New Task", Status.TO_DO);
+        //updateTaskNameById(5, "Good job! You've updated this task");
     }
  }
