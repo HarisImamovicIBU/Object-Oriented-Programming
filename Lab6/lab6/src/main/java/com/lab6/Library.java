@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 class StringUtils{
     public static boolean included(String word, String searched){
-        if(word.toUpperCase().contains(searched.trim())){
+        if(word.toUpperCase().contains(searched.trim().toUpperCase())){
             return true;
         }
         return false;
@@ -88,7 +88,6 @@ public class Library {
          for (Book book: Library.searchByPublisher("PENGUIN  ")) {
             System.out.println(book);
          }
-         
     }
 }
 class Book{
