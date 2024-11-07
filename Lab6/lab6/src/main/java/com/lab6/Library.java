@@ -3,6 +3,12 @@ import java.util.ArrayList;
 import java.util.List;
 class StringUtils{
     public static boolean included(String word, String searched){
+        /*Method body before PART 4:
+         * if(word.contains(searched)){
+         *      return true;
+         * }
+         * return false;
+         */
         if(word.toUpperCase().contains(searched.trim().toUpperCase())){
             return true;
         }
@@ -50,6 +56,10 @@ public class Library {
         return filteredByYear;
     }
     public static void main(String[] args) {
+        /*Some of the copy-paste sections from the document were a bit modified because they are repetitive
+         * eg. I've immediately added all of the books to the Library despite there being 3 different 
+         * sections in the document where same books are added.
+         */
         Library Library = new Library();
 
 
