@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainApplication {
+public class MainApplicationRestaurant {
     public static void main(String[] args) {
         /*I'll use the Example Scenario for testing purposes */
         /*1. Create instances of Dish and Drink with unique attributes 
@@ -27,7 +27,7 @@ public class MainApplication {
 
         /*3. Create reservations for both Drink and Dish items */
 
-        TableReservation reservation = new TableReservation("1", new Date(), 7);
+        TableReservation<MenuItem> reservation = new TableReservation("1", new Date(), 7);
         reservation.addItemToOrder(dish1, 5);
         reservation.addItemToOrder(drink1, 10);
         reservation.addItemToOrder(dish2, 3);
@@ -88,6 +88,10 @@ abstract class MenuItem implements Billable{
     abstract public double applyDiscount(double discountRate);
     @Override
     abstract public String getDescription();
+    @Override
+    public String toString(){
+        return "Name: "+this.name+", Price: "+this.price;
+    }
 }
 class Dish extends MenuItem{
     private CuisineType type;
@@ -164,7 +168,7 @@ class TableReservation<T extends MenuItem & Billable>{
     public double calculateTotalAmount(){
         double totalAmount=0.0;
         for(Map.Entry<T, Integer> entry : this.orderedItems.entrySet()){
-            totalAmount+=entry.getKey().getPrice()*entry.getValue()*entry.getKey().applyDiscount(20)/100;
+            totalAmount+=entry.getKey().getPrice()*entry.getValue()*(entry.getKey().applyDiscount(20)/100);
             //If dicount rate is for example 20
         }
         return totalAmount;
@@ -248,11 +252,11 @@ class Restaurant{
     public void addMenuItem(MenuItem item){
         if(item instanceof Dish){
             Dish newDishItem = (Dish) item;
-            menuItems.put(newDishItem.getName(), newDishItem);
+            menuItems.put(newDishItem.getCode(), newDishItem);
         }
         else if(item instanceof Drink){
             Drink newDrinkItem = (Drink) item;
-            menuItems.put(newDrinkItem.getName(), newDrinkItem);
+            menuItems.put(newDrinkItem.getCode(), newDrinkItem);
         }
         else{
             System.out.println("The type you've provided is not of MenuItem.");
