@@ -1,6 +1,5 @@
 package com.exampreparation;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,7 +14,38 @@ interface Rentable{
     public String getDescription();
 }
 public class MainApplicationCarRental {
-    
+    public static void main(String[] args) {
+        //1. Create instances of Car and Motorcycle with unique attributes (e.g., car type and engine type for Car, 
+        //engine capacity for Motorcycle).
+
+        Car car1 = new Car("1", "Yugo", 10, CarType.SPORTS, "Diesel");
+        Motorcycle motor1 = new Motorcycle("12", "Yamaha", 20, 100);
+
+        //2. Add the vehicles to the company’s inventory.
+        
+        RentalCompany rentalCompany = new RentalCompany("Haretova kompanija");
+        rentalCompany.addVehicle(motor1);
+        rentalCompany.addVehicle(car1);
+
+        //3. Create rental transactions for both car and motorcycle rentals.
+
+        RentalTransaction<Vehicle> transaction = new RentalTransaction("123", new Date(), 1);
+        transaction.addVehicleToRental(motor1, 10);
+        transaction.addVehicleToRental(car1, 12);
+
+        //4. Create a customer who makes multiple rentals with both car and motorcycle vehicles.
+
+        Customer customer1 = new Customer("1", "Rocky Balboa", "555333");
+        customer1.addRentalTransaction(transaction);
+
+        //5. Add the customer to the company’s system, and display their rental history.
+
+        rentalCompany.addCustomer(customer1);
+        for(Customer customer : rentalCompany.getCustomers()){
+            System.out.println(customer+" is in "+rentalCompany.getCompanyName()+"'s rental history");
+        }
+
+    }
 }
 abstract class Vehicle implements Rentable{
     private String vehicleId;
@@ -96,6 +126,11 @@ class Car extends Vehicle{
     public String getDescription(){
         return "Car type: "+this.carType+", Engine type: "+this.engineType;
     }
+
+    @Override
+    public double applyDiscount(double discountRate) {
+        return discountRate;
+    }
 }
 
 class Motorcycle extends Vehicle{
@@ -113,6 +148,11 @@ class Motorcycle extends Vehicle{
     @Override
     public String getDescription(){
         return "Engine capacity: "+this.engineCapacity;
+    }
+
+    @Override
+    public double applyDiscount(double discountRate) {
+        return discountRate;
     }
 }
 
@@ -160,7 +200,6 @@ class RentalTransaction <T extends Vehicle & Rentable>{
             totalAmount+=entry.getValue()*entry.getKey().getRentalRate()*(entry.getKey().applyDiscount(20)/100);
         }
         return totalAmount;
- 
     }
 }
 
