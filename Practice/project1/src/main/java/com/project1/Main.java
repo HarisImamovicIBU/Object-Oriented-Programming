@@ -1,5 +1,4 @@
 package com.project1;
-
 /*Create a Martial Arts hierarhy system where you will demonstrate key concepts of OOP.
  *Create an abstract class MartialArtist which will have the following attributes and methods:
  *Attributes: name, age, skill, numOfMatchesWon, isChampion. Create get/set methods and 2 constructors, 
@@ -20,9 +19,15 @@ package com.project1;
    
  *Create a subclass of MartialArtist named Karateka which will have the following attributes and methods:
  *Attributes: beltColor of ENUM type beltColor (WHITE, YELLOW, ORANGE, GREEN, BLUE, BROWN, BLACK)
- *Methods: Override the fightingStyle() method to print out "[name] is a karateka who performs stunning mawashi geri!"
-  NOTE: A karateka cannot fight if their beltColor is WHITE or YELLOW.
-  */
+ *Methods: Override the fightingStyle() method to print out "[name] is a karateka who performs stunning mawashi geri!" 
+ 
+ *Create a subclass of MartialArtist named Jiujiteiro which will have the following attributes and methods:
+ *Attributes: beltColor of ENUM type beltColor
+ *Methods: Override the fightingStyle method to print out "[name] is a jiujiteiro who suprises their oponnent with a rear naked choke!"
+
+ *Let's create a better implementation of the fight method. Since we needed to downcast MartialArtist each and every time, that means
+  that we can create a Generic method of type T which will extend MartialArtist and Figihtable.
+ */
 
 interface Fightable{
     public boolean canYouFight();
@@ -33,13 +38,13 @@ enum gloveColor{
 enum beltColor{
     WHITE, YELLOW, ORANGE, GREEN, BLUE, BROWN, BLACK
 }
-abstract class MaritalArtist implements Fightable{
+abstract class MartialArtist implements Fightable{
     private String name;
     private int age;
     private int skill;
     private int numOfMatchesWon;
     private boolean isChampion;
-    public MaritalArtist(String name, int age, int skill, int numOfMatchesWon, boolean isChampion) {
+    public MartialArtist(String name, int age, int skill, int numOfMatchesWon, boolean isChampion) {
         this.name=name;
         this.age=age;
         this.skill=skill;
@@ -51,7 +56,7 @@ abstract class MaritalArtist implements Fightable{
             this.isChampion=isChampion;
         }
     }
-    public MaritalArtist(String name, int age){
+    public MartialArtist(String name, int age){
         this(name, age, 0,0,false);
     }
     public String getName() {
@@ -87,7 +92,32 @@ abstract class MaritalArtist implements Fightable{
     public void train(){
         this.skill++;
     }
-    public void fight(MaritalArtist martialArtist){
+    public <T extends MartialArtist & Fightable> void fight(T martialArtist){
+        if(this.getClass()!=martialArtist.getClass()){
+            System.out.println(this.getName()+" and "+martialArtist.getName()+" cannot fight because they don't train the same sport.");
+        }
+        else if(!this.canYouFight() || !martialArtist.canYouFight()){
+            System.out.println(this.getName()+" and "+martialArtist.getName()+" cannot fight because their skill is low. Train first!");
+        }
+        else{
+            if(this.getSkill()>martialArtist.getSkill()){
+            System.out.println(this.getName()+" won the battle against "+martialArtist.getName()+"!");
+            this.setNumOfMatchesWon(this.getNumOfMatchesWon()+1);
+            this.setSkill(this.getSkill()+1);
+        }
+        else if(this.getSkill()<martialArtist.getSkill()){
+            System.out.println(martialArtist.getName()+" won the battle against "+this.getName()+"!");
+            martialArtist.setNumOfMatchesWon(martialArtist.getNumOfMatchesWon()+1);
+            martialArtist.setSkill(martialArtist.getSkill()+1);
+        }
+        else{
+            System.out.println("It's a draw between "+this.getName()+" and "+martialArtist.getName()+"!");
+        }
+    }
+}
+    /* fight() without generics
+    
+    public void fight(MartialArtist martialArtist){
         if(this instanceof Boxer){
             if(martialArtist instanceof Boxer){
                 if(this.canYouFight() && martialArtist.canYouFight()){
@@ -136,7 +166,32 @@ abstract class MaritalArtist implements Fightable{
                 System.out.println(this.getName()+" cannot fight "+ martialArtist.getName()+" because they are not the same type.");
             }
         }
-    }
+        else if(this instanceof Jiujiteiro){
+            if(martialArtist instanceof Jiujiteiro){
+                if(this.canYouFight() && martialArtist.canYouFight()){
+                    Jiujiteiro myLocalJiujiteiro = (Jiujiteiro) martialArtist;
+                        if(this.getSkill()>myLocalJiujiteiro.getSkill()){
+                            System.out.println(this.getName()+" won the fight!");
+                            this.setSkill(this.getSkill()+1);
+                        }
+                        else if(myLocalJiujiteiro.getSkill()>this.getSkill()){
+                            System.out.println(myLocalJiujiteiro.getName()+" won the fight!");
+                            myLocalJiujiteiro.setSkill(myLocalJiujiteiro.getSkill()+1);
+                        }
+                        else{
+                            System.out.println("A draw between "+this.getName()+" and "+myLocalJiujiteiro.getName()+"!");
+                        }
+                }
+                else{
+                    System.out.println(this.getName()+" has "+this.getSkill()+" skill, and "+martialArtist.getName()+" has "+martialArtist.getSkill()+" skill. So they cannot fight. We advise you to train!");
+                }
+            }
+            else{
+                System.out.println(this.getName()+" cannot fight "+ martialArtist.getName()+" because they are not the same type.");
+            }
+        }
+    }*/
+
     @Override
     public boolean canYouFight(){
         if(this.skill<=0){
@@ -150,9 +205,10 @@ abstract class MaritalArtist implements Fightable{
     public String toString(){
         return "Name: "+this.name+", Age: "+this.age+", Skill: "+this.skill+", Wins: "+this.numOfMatchesWon+", Champ: "+this.isChampion;
     }
+
     public abstract void fightingStyle();
 }
-class Boxer extends MaritalArtist{
+class Boxer extends MartialArtist{
     private gloveColor colorOfGloves;
     public Boxer(String name, int age, int skill, int numOfMatchesWon, boolean isChampion, gloveColor colorOfGloves){
         super(name, age, skill, numOfMatchesWon, isChampion);
@@ -176,7 +232,7 @@ class Boxer extends MaritalArtist{
         return super.toString()+", Gloves: "+this.colorOfGloves;
     }
 }
-class Karateka extends MaritalArtist{
+class Karateka extends MartialArtist{
     private beltColor colorOfBelt;
     public Karateka(String name, int age, int skill, int numOfMatchesWon, boolean isChampion, beltColor colorOfBelt) {
         super(name, age, skill, numOfMatchesWon, isChampion);
@@ -193,18 +249,50 @@ class Karateka extends MaritalArtist{
     public String toString(){
         return super.toString()+", Belt: "+this.colorOfBelt;
     }
+    public beltColor getColorOfBelt() {
+        return colorOfBelt;
+    }
+    public void setColorOfBelt(beltColor colorOfBelt) {
+        this.colorOfBelt=colorOfBelt;
+    }
+}
+class Jiujiteiro extends MartialArtist{
+    private beltColor colorOfBelt;
+
+    public Jiujiteiro(beltColor colorOfBelt, String name, int age) {
+        super(name, age);
+        this.colorOfBelt = colorOfBelt;
+    }
+
+    public Jiujiteiro(beltColor colorOfBelt, String name, int age, int skill, int numOfMatchesWon, boolean isChampion) {
+        super(name, age, skill, numOfMatchesWon, isChampion);
+        this.colorOfBelt = colorOfBelt;
+    }
+
+    public beltColor getColorOfBelt() {
+        return colorOfBelt;
+    }
+
+    public void setColorOfBelt(beltColor colorOfBelt) {
+        this.colorOfBelt = colorOfBelt;
+    }
+    @Override
+    public void fightingStyle(){
+        System.out.println(this.getName()+" is a jiujiteior who suprises his opponent with a rear naked choke!");
+
+    }
 }
 public class Main {
     public static void main(String[] args) {
         /*Let's create two boxers first. We will use the main constructor with all attributes, display their info, and make them fight!*/
-        MaritalArtist boxer1 = new Boxer("Mike Tyson", 40, 10, 10, true, gloveColor.BLUE);
-        MaritalArtist boxer2 = new Boxer("Floyd Mayweather", 36, 9, 9, false, gloveColor.RED);
+        MartialArtist boxer1 = new Boxer("Mike Tyson", 40, 10, 10, true, gloveColor.BLUE);
+        MartialArtist boxer2 = new Boxer("Floyd Mayweather", 36, 9, 9, false, gloveColor.RED);
         System.out.println(boxer1);
         System.out.println(boxer2);
         boxer1.fight(boxer2);
         /*Let's now create an instantiation of Karateka and make him fight a boxer, to demonstrate that two different types of
           martial artists cannot fight!*/
-        MaritalArtist karateka1 = new Karateka("Haris Imamovic", 20, 8, 10, true, beltColor.BROWN);
+        MartialArtist karateka1 = new Karateka("Haris Imamovic", 20, 8, 10, true, beltColor.BROWN);
         System.out.println(karateka1);
         karateka1.fight(boxer2);
         /*Let's now create a new Karateka who will by default have a skill of 0, and we will demonstrate that he cannot
