@@ -1,0 +1,10 @@
+Wed Dec 04 20:44:19 CET 2024 | Event Type: Error | User ID: 25
+Wed Dec 04 20:44:19 CET 2024 | Event Type: Error | User ID: 266
+Wed Dec 04 20:44:19 CET 2024 | Event Type: Error | User ID: 432
+Wed Dec 04 20:44:19 CET 2024 | Event Type: Purchase | User ID: 763
+Wed Dec 04 20:44:19 CET 2024 | Event Type: ViewPage | User ID: 742
+Wed Dec 04 20:44:19 CET 2024 | Event Type: Error | User ID: 847
+Wed Dec 04 20:44:19 CET 2024 | Event Type: Logout | User ID: 274
+Wed Dec 04 20:44:19 CET 2024 | Event Type: Error | User ID: 108
+Wed Dec 04 20:44:19 CET 2024 | Event Type: Error | User ID: 138
+Wed Dec 04 20:44:19 CET 2024 | Event Type: ViewPage | User ID: 851
