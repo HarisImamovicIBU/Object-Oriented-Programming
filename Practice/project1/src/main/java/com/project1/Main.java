@@ -29,6 +29,11 @@ package com.project1;
   that we can create a Generic method of type T which will extend MartialArtist and Figihtable.
  */
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 interface Fightable{
     public boolean canYouFight();
 }
@@ -115,6 +120,7 @@ abstract class MartialArtist implements Fightable{
         }
     }
     }
+    
     /* fight() without generics
     
     public void fight(MartialArtist martialArtist){
@@ -201,6 +207,13 @@ abstract class MartialArtist implements Fightable{
             return true;
         }
     }
+
+    public static Optional<MartialArtist> findMartialArtistByName(List<MartialArtist> martialArtists, String name) {
+        return martialArtists.stream()
+                            .filter(ma -> ma.getName().equals(name))
+                            .findFirst();
+    }
+
     @Override
     public String toString(){
         return "Name: "+this.name+", Age: "+this.age+", Skill: "+this.skill+", Wins: "+this.numOfMatchesWon+", Champ: "+this.isChampion;
@@ -301,5 +314,12 @@ public class Main {
         karateka1.fight(karateka2);
         karateka2.train();
         karateka1.fight(karateka2);
+        /*Let's find a Martial Artist by his name. */
+        List<MartialArtist> listOfMartialArtists = new ArrayList<>(Arrays.asList(boxer1,boxer2,karateka1,karateka2));
+        Optional<MartialArtist> foundMartialArtist = MartialArtist.findMartialArtistByName(listOfMartialArtists, "Mike Tyson");
+        foundMartialArtist.ifPresentOrElse(
+            ma -> System.out.println("Found: " + ma),
+            () -> System.out.println("Martial Artist not found")
+        );
     }
 }
