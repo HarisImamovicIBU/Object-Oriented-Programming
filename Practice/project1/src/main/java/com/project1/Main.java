@@ -114,7 +114,7 @@ abstract class MartialArtist implements Fightable{
             System.out.println("It's a draw between "+this.getName()+" and "+martialArtist.getName()+"!");
         }
     }
-}
+    }
     /* fight() without generics
     
     public void fight(MartialArtist martialArtist){
