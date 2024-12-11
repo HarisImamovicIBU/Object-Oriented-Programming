@@ -1,0 +1,48 @@
+Task: Employee Management System
+Description:
+Create an Employee Management System in Java that manages employee records with details such as Employee ID, Name, Department, and Salary. The system includes custom exceptions to handle specific scenarios, such as missing employees or invalid employee data. This task also involves creating a CSV file employees.csv and implementing relevant JUnit tests.
+
+Objectives:
+1. Create an Employee Class:
+Implement a Java class named Employee with private fields for employeeId, name, department, and salary.
+Include a constructor to initialize these fields and getter methods for accessing them.
+Override the toString method to provide a formatted representation of an employee and display only their name and department.
+2. Implement Custom Exceptions:
+Develop the following custom exceptions:
+EmployeeNotFoundException: A checked exception that provides a constructor accepting a message.
+EmptyEmployeeListException: An unchecked exception that provides a constructor accepting a message.
+InvalidEmployeeDataException: A checked exception thrown during data validation for incorrect or missing employee details.
+3. Build the EmployeeSystem Class:
+Create a class named EmployeeSystem to manage a list of employees.
+
+Constructors:
+
+Constructor 1: Accepts a filename, reads employee data from a CSV file, validates the data, and initializes the employees list. Handles potential IOException.
+Constructor 2: Accepts a List<Employee> and initializes the employees list.
+Static Method:
+
+readEmployees(String filename): Reads data from the CSV file and returns a List<Employee>.
+Instance Methods:
+
+noOfEmployees(): Returns the total number of employees in the system.
+getEmployeeById(int id): Returns an Optional<Employee> for the employee with the specified ID, if found.
+getHighestSalaryEmployee(): Returns the employee with the highest salary. Throws EmptyEmployeeListException with the message "No employees found in the system" if the list is empty.
+getEmployeeFromDepartment(String department): Returns a list of employees from the specified department. Throws EmptyEmployeeListException if no employees are found in the system.
+getLongestNameEmployee(): Returns the employee with the longest name. Throws EmptyEmployeeListException if the list is empty.
+Private Method:
+
+validateEmployeeData(List<Employee> employees): Validates that all employees have a valid salary (greater than 0). If invalid, throws InvalidEmployeeDataException with the message "Employee data contains invalid entries."
+JUnit Testing:
+Develop a test class EmployeeSystemTest to validate the functionality.
+
+Write Unit Tests:
+testIfEmployeesArePresent(): Assert that there is at least one employee in the file.
+testEmployeeWithId500(): Assert that an employee with ID 500 does not exist.
+testHighestSalaryEmployee(): Assert that the employee with the highest salary in the system earns $150,000.
+testExceptionForEmptyEmployeeList(): Assert that EmptyEmployeeListException is thrown for empty.csv when calling getHighestSalaryEmployee.
+testExceptionMessageForEmptyEmployeeList(): Assert that the exception message is "No employees found in the system" when calling getHighestSalaryEmployee.
+testNamesArray(): Verify that the first five employee names obtained using streams match:
+"Sophia Clark", "Benjamin White", "Amelia Carter", "Elijah Brown", "Charlotte Martinez".
+testSameEmployee(): Assert that the employee object with the highest salary is the same as the employee object with ID 10.
+testEmployeesFromDepartment(): Verify that employees from the "IT" department include "Sophia Clark" and "Benjamin White".
+Coverage Testing: Write additional tests to achieve over 90% method coverage for both Employee and EmployeeSystem classes.
