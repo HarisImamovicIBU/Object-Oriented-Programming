@@ -1,0 +1,81 @@
+Problem Statement: Book Data Transformation and Reporting
+Overview:
+You are tasked with developing a Java-based application to manage and transform book sales data. The application will load data from a CSV file, process it, and generate a formatted report in a new CSV file. Your implementation must leverage Java annotations, custom exceptions, and formatting techniques for a clean and robust solution.
+________________________________________
+Requirements:
+1. Enums
+●	Create two enums:
+○	CaseFormatter:
+■	Values: ORDINARY, UPPER_CASE, LOWER_CASE.
+○	NumberFormatter:
+■	Values: COMMA, PERCENTAGE.
+________________________________________
+2. Annotation
+●	Define a custom annotation @WriteConcerns with the following properties that will be used on the attribute level during when the program is running:
+○	case_format: Type CaseFormatter, default value CaseFormatter.ORDINARY.
+○	number_format: Type NumberFormatter, default value NumberFormatter.COMMA.
+________________________________________
+3. Book Class
+●	Implement a Book class with the following fields:
+○	date (Date): Annotated with @WriteConcerns.
+○	quarter (String): Annotated with @WriteConcerns(case_format = CaseFormatter.ORDINARY).
+○	qtr (int).
+○	year (int).
+○	customerId (String): Annotated with @WriteConcerns(case_format = CaseFormatter.UPPER_CASE).
+○	totalAmount (double): Annotated with @WriteConcerns(number_format = NumberFormatter.COMMA).
+○	profitPercentage (double): Annotated with @WriteConcerns(number_format = NumberFormatter.PERCENTAGE).
+○	profitInr (double).
+○	costPrice (double).
+________________________________________
+4. BookBuilder Class
+●	Implement BookBuilder as a static inner class within the Book class for constructing Book objects with a fluent interface.
+________________________________________
+5. Custom Exception
+●	Create a WrongFormatException extending RuntimeException with constructors for:
+○	Error message.
+○	Error message and cause.
+________________________________________
+6. Data Loading
+●	Implement a class FinalPrep with the static method:
+○	loadBooks(String fileName): Reads book data from a CSV file and converts it into a List<Book>.
+●	Ensure that fields like date, customerId, and totalAmount are not empty. If they are, throw a WrongFormatException with the message "Values are empty" and set the cause as a ClassCastException.
+________________________________________
+7. Reporting
+●	Create a ReportWriter class with the static method:
+○	writeReport(String outputFileName, List<Book> books): Generates a CSV report.
+●	Create a header in a output file
+●	Processing logic:
+○	For fields annotated with @WriteConcerns:
+■	String fields: Format based on case_format:
+■	LOWER_CASE: Convert to lowercase.
+■	UPPER_CASE: Convert to uppercase.
+■	ORDINARY: Leave unchanged.
+■	Numeric fields: Format based on number_format:
+■	PERCENTAGE: Append %.
+■	COMMA: Format using DecimalFormat:
+	DecimalFormat df = new DecimalFormat("#,###.##");
+○	df.format(value);
+________________________________________
+8. Testing
+●	Create a BookTest class with:
+○	Static List<Book> field named books.
+○	A method annotated with @BeforeEach to populate books by calling FinalPrep.loadBooks.
+○	Three test methods:
+■	ifValuesEmpty_ThrowAnCustomException: Assert WrongFormatException is thrown when the input CSV has empty fields.
+■	ifFileLoaded_assertMultipleConditions: Use assertAll to:
+■	Verify the customer ID at index 1 is "B07FWVXXU".
+■	Verify the size of the list matches the rows in the file minus the header.
+■	ifFileDoesNotExist_assertCauseIsFileNotFoundException: Use a try-catch block to ensure a RuntimeException caused by FileNotFoundException is thrown for a non-existent file.
+________________________________________
+9. MainRun Class
+●	Implement MainRun with:
+○	main method to initialize FinalPrep, load books, and generate a report using ReportWriter.
+________________________________________
+Maven Dependency:
+Add the following dependency to your pom.xml for testing:
+<dependency>
+   <groupId>org.junit.jupiter</groupId>
+   <artifactId>junit-jupiter-api</artifactId>
+   <version>5.10.0</version>
+   <scope>test</scope>
+</dependency>
